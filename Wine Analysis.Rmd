@@ -409,10 +409,54 @@ ggplot(wine.red, aes(x = density, y = pH, color = quality)) +
 
 > Densiy and pH have a coeficient of __r = 0.34__. This is a weak to medium strength relationship. When visually graphed, the relationship is apparent and appears to be influenced strongly by outliers. Moreover, it appears that quality has a noticeable relationship, although weak, where higher quality wines are more dense. This is expected because, as explored above, higher quality wines tend to have more alcohol. More alcohol in a wine increases its density.
 
+# Summary of Plots
 
+```{r Histogram of Wine Quality Review, echo=FALSE, message=FALSE, warning=FALSE}
 
+# This creates a histogram showing the count of wines sorted by quality
 
-------
+ggplot(aes(x = quality), data = wine.red) +
+  geom_histogram(binwidth = 1, color = 'black', fill = '#660613') +
+  scale_x_continuous(breaks = seq(1,8,1)) +
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.2, colour = "black") +
+  xlab('Quality of Wines') + 
+  ylab('Number of Wines') +
+  ggtitle('Histogram Showcasing Wine Quality')
+  
+table(wine.red$quality)
+```
+
+> I find it interesting to note how closely this sample approximates a normal distribution. I suspect that if wine ratings had a smaller interval value (ie rating in increments of 0.5) that this would more approximate a normal distribution.
+
+```{r Multivariate Plots 2 Review, echo=FALSE, message=FALSE, warning=FALSE}
+  scale_color_gradient(high = 'green', low = 'red')
+ggplot(wine.red, aes(x = density, y = fixed.acidity, color = alcohol)) +
+  geom_jitter() +
+  scale_color_gradient(high = 'green', low = 'red')
+```
+
+> This plot from the multivariate section is especially interesting. One item to note that alcohol in solution is acidic; it allows for the free exchange of potential hydrogen (ph) when dissolved in water. One thing to note is that we do see that relationship. As alcohol content increases, the pH level decreases (becomes more acidic). Acidity level in wine is influenced by acohol content, tartaric acid levels, citric acid levels, and possibly more acids in the wine.
+
+```{r Correlation Investigation 1 Review, echo=FALSE, message=FALSE, warning=FALSE}
+
+# This function finds the correlation columns 2 - 13 of the CSV, finds the correlation between each variable, rounds it off, and then plots it in a correlation graph.
+
+corr <- round(cor(wine.red[, 2:13]), 3)
+ggcorrplot(corr, hc.order = TRUE,
+           outline.col = "gray",
+           lab = TRUE,
+           tl.cex = 7,
+           digits = 2,
+           tl.srt = 90,
+           lab_size = 3,
+           p.mat = NULL,
+           insig = c("pch", "blank"),
+           pch = 1,
+           pch.col = "black",
+           pch.cex =1)
+```
+
+> I would like to touch on this correlation chart once more. It makes me wonder why certain variables about these wines were chosen to be measured. My guess is that they are important for the taste of wines and contribute to qualities of a wine. However, many variables have a weak relationship with each other which makes me think that, from an analytical perspective, they do not serve much pupose. I suspect that they play a large role in wine taste and so a large correlation might not be absolutely necesary.
 
 
 # Reflection
