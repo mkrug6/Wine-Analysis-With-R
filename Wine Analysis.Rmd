@@ -1,18 +1,26 @@
 ---
-title: "Wine Analysis Using R - A Udacity Project"
+title: "Wine Analysis Using R"
 author: "Mason Krug"
 date: "5/1/2021"
 output: html_document
 ---
 
+# Introduction to the Data
+
 List of packages used in this project:
 ```{r Libraries, message=FALSE, warning=FALSE, include=TRUE}
+
+# This will simply print the libraries used
+
 library(ggplot2)
 library(gridExtra)
 library(ggcorrplot)
 ```
 
 ```{r Data Preparation, message=FALSE, warning=FALSE, include=FALSE}
+
+# This imports the CSV file for manipulation from R
+
 wine.red <- read.csv('wineQualityReds.csv')
 ```
 
@@ -23,12 +31,18 @@ wine.red <- read.csv('wineQualityReds.csv')
 > **Structure of the Data**: Here we can see the structure that the CSV file takes. It consists of the following variables. Quality of the wine is rated from 1 - 10 and alcohol represents alcohol level as a percentage. This data set consists of 13 variables to explore.
 
 ```{r echo=FALSE, message=FALSE, warning=FALSE}
+
+# This details the type in each variable (string/int) and gives a small sample from each column
+
 str(wine.red)
 ```
 
 > **Data Summary**: Below is a summary of the data from the CSV file. Here we can understand a bit more about each variable and the spread of each variable.
 
 ```{r Data summary, echo=FALSE, message=FALSE, warning=FALSE}
+
+# This shows the structure of the data in the CSV file.IE: mean, median, and more of each variable
+
 summary(wine.red)
 ```
 
@@ -53,6 +67,9 @@ wine.red$quality.cat <- factor(wine.red$quality.cat, levels = c("Superb", "Excep
 > **Histogram of Wine Quality**: Here we can see that a majority of the wine has a quality of 5 or 6 with a handfull of wines labeled as 7.
 
 ```{r Histogram of Wine Quality, echo=FALSE, message=FALSE, warning=FALSE}
+
+# This creates a histogram showing the count of wines sorted by quality
+
 ggplot(aes(x = quality), data = wine.red) +
   geom_histogram(binwidth = 1, color = 'black', fill = '#660613') +
   scale_x_continuous(breaks = seq(1,8,1)) +
@@ -66,68 +83,91 @@ table(wine.red$quality)
 
 > **Further Exploration**: Here I want to graphically represent a handful of vaiables. I want to see if there is any approximation to a normal distribution.
 
-```{r Univariate Analysis Graphs, echo=FALSE, message=FALSE, warning=FALSE}
+```{r Univariate Analysis Graphs 1, echo=FALSE, message=FALSE, warning=FALSE}
+
+# The below will make 10 charts. Each chart explores 1 variable. They will later be displayed next to one another
+
 h1 <- ggplot(aes(x = fixed.acidity), data = wine.red) +
   geom_histogram(color = 'black', fill = '#660613', bins = 30) +
   scale_x_continuous(limits = c(4, 16)) +
   scale_y_continuous(trans = 'log10') +
-  ggtitle('Histogram of Fixed Acidity')
+  ggtitle('Histogram of Fixed Acidity') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Tartaric Acid in g / dm^3")
 
 h2 <- ggplot(aes(x = volatile.acidity), data = wine.red) +
   geom_histogram(color = 'black', fill = '#660613', bins = 30) +
   scale_x_continuous(limits = c(0, 2)) +
   scale_y_continuous(trans = 'log10') +
-  ggtitle('Histogram of Volatile Acidity')
+  ggtitle('Histogram of Volatile Acidity') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Acetic Acid in g / dm^3")
 
 h3 <- ggplot(aes(x = citric.acid), data = wine.red) +
   geom_histogram(color = 'black', fill = '#660613', bins = 30) +
   scale_x_continuous(limits = c(0, 1)) +
   scale_y_continuous(trans = 'log10') +
-  ggtitle('Histogram of Citric Acid')
+  ggtitle('Histogram of Citric Acid') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Citric Acid in g / dm^3")
 
 h4 <- ggplot(aes(x = residual.sugar), data = wine.red) +
   geom_histogram(color = 'black', fill = '#660613', bins = 30) +
   scale_x_continuous(limits = c(0, 16)) +
   scale_y_continuous(trans = 'log10') +
-  ggtitle('Histogram of Residual Sugar')
+  ggtitle('Histogram of Residual Sugar') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Residual Sugar in g / dm^3")
 
 h5 <- ggplot(aes(x = chlorides), data = wine.red) +
   geom_histogram(color = 'black', fill = '#660613', bins = 30) +
   scale_x_continuous(limits = c(0, 1)) +
   scale_y_continuous(trans = 'log10') +
-  ggtitle('Histogram of Chlorides')
+  ggtitle('Histogram of Chlorides') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Sodium Chloride in g / dm^3")
 
 h6 <- ggplot(aes(x = free.sulfur.dioxide), data = wine.red) +
   geom_histogram(color = 'black', fill = '#660613', bins = 30) +
   scale_x_continuous(limits = c(1, 72)) +
   scale_y_continuous(trans = 'log10') +
-  ggtitle('Histogram of Free Sulfur Dioxide')
+  ggtitle('Histogram of Free Sulfur Dioxide') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Free Sulfur Dioxide in mg / dm^3")
 
 h7 <- ggplot(aes(x = total.sulfur.dioxide), data = wine.red) +
   geom_histogram(color = 'black', fill = '#660613', bins = 30) +
   scale_x_continuous(limits = c(6, 289)) +
   scale_y_continuous(trans = 'log10') +
-  ggtitle('Histogram of Total Sulfur Dioxide')
+  ggtitle('Histogram of Total Sulfur Dioxide') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Total Sulfur Dioxide in mg / dm^3")
 
 
 h8 <- ggplot(aes(x = pH), data = wine.red) +
   scale_x_continuous(limits = c(2, 4)) +
   geom_histogram(color = 'black', fill = '#660613', bins = 30) +
   scale_y_continuous(trans = 'log10') +
-  ggtitle('Histogram of pH')
+  ggtitle('Histogram of pH') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "pH")
 
 h9 <- ggplot(aes(x = sulphates), data = wine.red) +
   scale_x_continuous(limits = c(0, 2)) +
   geom_histogram(color = 'black', fill = '#660613', bins = 30) +
   scale_y_continuous(trans = 'log10') +
-  ggtitle('Histogram of Sulphates')
+  ggtitle('Histogram of Sulphates') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Potassium Sulphate in g / dm^3")
 
 h10 <- ggplot(aes(x = alcohol), data = wine.red) +
   scale_x_continuous(limits = c(8, 15)) +
   geom_histogram(color = 'black', fill = '#660613', bins = 30) +
-  scale_y_continuous(trans = 'log10') +
-  ggtitle('Histogram of Alcohol')
+  ggtitle('Histogram of Alcohol') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "% Alcohol By Volume")
 
+# Displays the above charts in a table-like format
 grid.arrange(h1, h2, ncol = 2)
 grid.arrange(h3, h4, ncol = 2)
 grid.arrange(h5, h6, ncol = 2)
@@ -135,6 +175,89 @@ grid.arrange(h7, h8, ncol = 2)
 grid.arrange(h9, h10, ncol = 2)
   
 ```
+
+
+> **Logarithmic Exploration**: Many of the above histograms are close to a normal distribution. Let's apply a logarithmic function to the above histograms to better approximate a normal distribution.
+
+
+```{r Univariate Analysis Graphs 2, echo=FALSE, message=FALSE, warning=FALSE}
+
+
+# The below will make 10 charts. Each chart explores 1 variable. They will later be displayed next to one another
+
+l1 <- ggplot(aes(x = log(fixed.acidity)), data = wine.red) +
+  geom_histogram(color = 'black', fill = '#660613', bins = 30) +
+  ggtitle('Log 10 of Histogram of Fixed Acidity') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Logarithmatic Tartaric Acid in g / dm^3")
+
+l2 <- ggplot(aes(x = log(volatile.acidity)), data = wine.red) +
+  geom_histogram(color = 'black', fill = '#660613', bins = 30) +
+  scale_x_continuous(limits = c(0, 2)) +
+  ggtitle('Log 10 of Histogram of Volatile Acidity') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Log10 of Acetic Acid in g / dm^3")
+
+l3 <- ggplot(aes(x = log(citric.acid)), data = wine.red) +
+  geom_histogram(color = 'black', fill = '#660613', bins = 30) +
+  ggtitle('Log 10 of Histogram of Citric Acid') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Log10 of Citric Acid in g / dm^3")
+
+l4 <- ggplot(aes(x = log(residual.sugar)), data = wine.red) +
+  geom_histogram(color = 'black', fill = '#660613', bins = 30) +
+  scale_x_continuous(limits = c(0, 16)) +
+  ggtitle('Log 10 of Histogram of Residual Sugar') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Log10 of Residual Sugar in g / dm^3")
+
+l5 <- ggplot(aes(x = log(chlorides)), data = wine.red) +
+  geom_histogram(color = 'black', fill = '#660613', bins = 30) +
+  ggtitle('Log 10 of Histogram of Chlorides') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Log10 of Sodium Chloride in g / dm^3")
+
+l6 <- ggplot(aes(x = log(free.sulfur.dioxide)), data = wine.red) +
+  geom_histogram(color = 'black', fill = '#660613', bins = 30) +
+  ggtitle('Log 10 of Histogram of Free Sulfur Dioxide') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Log10 of Free Sulfur Dioxide in mg / dm^3")
+
+l7 <- ggplot(aes(x = log(total.sulfur.dioxide)), data = wine.red) +
+  geom_histogram(color = 'black', fill = '#660613', bins = 30) +
+  ggtitle('Log 10 of Histogram of Total Sulfur Dioxide') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Log10 of Total Sulphur Dioxide in mg / dm^3")
+
+l8 <- ggplot(aes(x = log(pH)), data = wine.red) +
+  geom_histogram(color = 'black', fill = '#660613', bins = 30) +
+  ggtitle('Log 10 of Histogram of pH') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Log10 of pH")
+
+l9 <- ggplot(aes(x = log(sulphates)), data = wine.red) +
+  scale_x_continuous(limits = c(0, 2)) +
+  geom_histogram(color = 'black', fill = '#660613', bins = 30) +
+  ggtitle('Log 10 of Histogram of Sulphates') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Log10 of Potassium Sulphate in g / dm^3")
+
+l10 <- ggplot(aes(x = log(alcohol)), data = wine.red) +
+  geom_histogram(color = 'black', fill = '#660613', bins = 30) +
+  ggtitle('Log 10 of Histogram of Alcohol') + 
+  labs(y  = "Count of Wines") +
+  labs(x = "Log10 of % Alcohol By Volume")
+
+# Displays the above charts in a table-like format
+grid.arrange(l1, l2, ncol = 2)
+grid.arrange(l3, l4, ncol = 2)
+grid.arrange(l5, l6, ncol = 2)
+grid.arrange(l7, l8, ncol = 2)
+grid.arrange(l9, l10, ncol = 2)
+  
+```
+
+> Above we can see that some variables are much better represented using Log10. Fixed acidity, volatile acidity, sulphates, and alcohol are now more normal. The other graphs approximate normal as well however outliers greatly skew the results.
 
 ### What is the structure of your dataset?
 
@@ -167,7 +290,12 @@ grid.arrange(h9, h10, ncol = 2)
 
 # Bivariate Analysis
 
-```{r Correlation Investigation, echo=FALSE, message=FALSE, warning=FALSE}
+### Plot One
+
+```{r Correlation Investigation 1, echo=FALSE, message=FALSE, warning=FALSE}
+
+# This function finds the correlation columns 2 - 13 of the CSV, finds the correlation between each variable, rounds it off, and then plots it in a correlation graph.
+
 corr <- round(cor(wine.red[, 2:13]), 3)
 ggcorrplot(corr, hc.order = TRUE,
            outline.col = "gray",
@@ -183,6 +311,35 @@ ggcorrplot(corr, hc.order = TRUE,
            pch.cex =1)
 ```
 
+### Plot Two
+
+```{r Correlation Investigation 2, echo=FALSE, message=FALSE, warning=FALSE}
+
+# This charts alcohol content against quality
+
+wine.red$quality_factor <- factor(wine.red$quality)
+ggplot(data = wine.red, aes(y = alcohol, x = quality, color = quality_factor)) +
+  geom_jitter(alpha = 1/4) + 
+  geom_smooth(method = "lm")
+
+```
+
+
+
+
+### Plot Three
+
+```{r Correlation Investigation 3, echo=FALSE, message=FALSE, warning=FALSE}
+
+#Creates a box plot comparing alcohol content and quality
+
+boxplot1 <- ggplot(data = wine.red, aes(y = alcohol, x = quality_factor)) +
+  geom_boxplot()
+boxplot1
+
+```
+
+
 ### Talk about some of the relationships you observed in this part of the investigation. How did the feature(s) of interest vary with other features in the dataset?
 
 > pH and Fixed Acidity as well as pH and Volatile Acidity Acid levels had the strongest relationship of __-.060__ and __-.055__, respectively.
@@ -194,6 +351,8 @@ ggcorrplot(corr, hc.order = TRUE,
 ### What was the strongest relationship you found?
 
 > The strongest relationship observed was betwenn fixed acidity and citric acid (r = ___0.67___).
+
+# Multivariate Analysis
 
 ### Plot One
 
@@ -233,6 +392,25 @@ ggplot(wine.red, aes(x = residual.sugar, y = alcohol, color = quality)) +
 ### Description Three
 
 > Residual sugar has a notable amount of outliers. Barring the outliers, the quality of the wine increases with alcohol content. As alcohol content increases, the spread of residual sugar tends to decrease however outliers strongly influence that correlation coefficient.
+
+### Plot Four
+
+```{r Multivariate Plots 4, echo=FALSE, message=FALSE, warning=FALSE}
+  
+#Makes a scatter plot comparing pH, density, and quality
+
+  scale_color_gradient(high = 'green', low = 'red')
+ggplot(wine.red, aes(x = density, y = pH, color = quality)) +
+  geom_jitter() +
+  scale_color_gradient(high = 'green', low = 'red')
+```
+
+### Description Four
+
+> Densiy and pH have a coeficient of __r = 0.34__. This is a weak to medium strength relationship. When visually graphed, the relationship is apparent and appears to be influenced strongly by outliers. Moreover, it appears that quality has a noticeable relationship, although weak, where higher quality wines are more dense. This is expected because, as explored above, higher quality wines tend to have more alcohol. More alcohol in a wine increases its density.
+
+
+
 
 ------
 
